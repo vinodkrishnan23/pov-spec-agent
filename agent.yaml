@@ -1,0 +1,34 @@
+name: pov-spec-agent
+entrypoint: pov_spec_agent.main:app
+framework: langgraph
+description: pov-builder's spec-design slice (transcript -> InitialPOVSpec -> review -> human approval -> DetailedTechnicalSpec -> human approval), deployed standalone. Code generation stays with the full pov-builder pipeline.
+build:
+  context: .
+
+# Placeholder — allow_all until the real outbound hosts (OpenAI/Grove,
+# Atlas, api.github.com) are confirmed against a live deploy, mirroring
+# chat-agent/agent.yaml's note that egress rules are easy to get subtly
+# wrong (e.g. an unintended `component:` scope silently blocking a real
+# call). Tighten to an explicit allow_list once deployed once for real —
+# do not leave this as allow_all for a production deployment.
+network:
+  egress_mode: allow_all
+
+# No features.deep_agent — this is a single graph (transcript_analyzer ->
+# pov_reviewer -> initial_spec_approval_gate -> spec_architect ->
+# technical_spec_approval_gate), not App.deep_agent() subagent dispatch.
+# See scaffold-magenta-multi-agent's own note on that distinction.
+
+required_secrets:
+  aer:
+    - OPENAI_API_KEY
+    - OPENAI_BASE_URL
+    - MONGODB_URI    # app.checkpointer() + MongoPovRunStore's run ledger (pov_builder_runs)
+    - GITHUB_TOKEN   # spec_architect commits data_model/query_patterns/api_contract/frontend_contract/requirements to GitHub
+    - GITHUB_REPO    # defaults to "pov-builder" if unset — see pov_builder.config.settings
+    # GITHUB_ORG / GITHUB_USERNAME: optional — only needed if the token's
+    # own account isn't the right owner for GITHUB_REPO. See
+    # pov_builder.tools.git_repo.GitHubRepoStore._owner.
+  # No `tools:` section — everything here runs directly in AER (no
+  # @app.tool() functions), same reasoning as spec-architect/agent.yaml's
+  # own comment for the identical shape.

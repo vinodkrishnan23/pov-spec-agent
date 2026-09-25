@@ -1,0 +1,21 @@
+.agentic/
+.env
+.env.*
+!.env.example
+!env.example
+.devcontainer/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+
+# Local scratch
+*.log
+.DS_Store

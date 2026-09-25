@@ -46,6 +46,26 @@ standalone on Magenta:
 
 `pov-builder` itself is never modified by this project.
 
+## Declared tools (Tool Pod), not wired into the graph
+
+`src/pov_spec_agent/main.py` also declares 3 `@app.tool()` functions,
+ported from `pov_builder.tools.git_push_tools` (which exists there purely
+to show the tool shape — its own docstring says so): `resolve_pov_git_branch`,
+`commit_spec_contract`, `commit_pov_code_files`. These run in Magenta's
+**Tool Pod** — a separate process from AER — which is why `agent.yaml`
+declares their secrets (`GITHUB_TOKEN`/`GITHUB_REPO`) a SECOND time under
+`required_secrets.tools`, even though AER already has its own copy for
+`spec_architect`'s direct calls.
+
+Deliberately **not** wired into `build_spec_graph`'s LLM calls —
+`spec_architect` still commits contracts deterministically via
+`_git_repo_store` directly, exactly as before. This only makes the
+capability *declared* (visible to the platform, independently invocable —
+e.g. from the Playground's tool inspector), without changing the graph's
+actual behavior. Turning them into something the graph's LLM genuinely
+calls (via `bind_tools`/tool-calling in a node) would be a separate,
+bigger change.
+
 **Updating the pinned `pov-builder` commit** — bump the `rev` in
 `pyproject.toml`'s `[tool.uv.sources]` to the new commit sha, then
 `rm uv.lock && uv sync && uv run pytest`. Deliberately not left tracking

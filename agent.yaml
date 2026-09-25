@@ -29,6 +29,21 @@ required_secrets:
     # GITHUB_ORG / GITHUB_USERNAME: optional — only needed if the token's
     # own account isn't the right owner for GITHUB_REPO. See
     # pov_builder.tools.git_repo.GitHubRepoStore._owner.
-  # No `tools:` section — everything here runs directly in AER (no
-  # @app.tool() functions), same reasoning as spec-architect/agent.yaml's
-  # own comment for the identical shape.
+  tools:
+    # These 3 tools (main.py) each construct their OWN GitHubRepoStore in
+    # the Tool Pod's own process — a separate pod from AER, so the same
+    # secrets AER already has above must ALSO be declared here (a secret
+    # declared only under `aer:` is invisible in the Tool Pod — same
+    # reasoning chat-agent-webapp/agent.yaml's own comment gives for its
+    # S3/AWS secrets). Not wired into the graph's own LLM calls — declared
+    # so the capability exists on the platform, spec_architect's actual
+    # commits still go through `aer:`'s copy directly, unchanged.
+    resolve_pov_git_branch:
+      - GITHUB_TOKEN
+      - GITHUB_REPO
+    commit_spec_contract:
+      - GITHUB_TOKEN
+      - GITHUB_REPO
+    commit_pov_code_files:
+      - GITHUB_TOKEN
+      - GITHUB_REPO

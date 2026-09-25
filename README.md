@@ -23,8 +23,11 @@ This was a deliberate choice, discussed before building: `pov-builder`
 is a plain, non-Magenta LangGraph project (its own CLI + local FastAPI
 UI). Rather than bolting Magenta deployment concerns onto it directly,
 `pov-spec-agent` is a **separate project that depends on `pov-builder`**
-(`pyproject.toml`'s `[tool.uv.sources]`, as an editable local path
-dependency) and adds only what's specific to running this slice
+(`pyproject.toml`'s `[tool.uv.sources]`, as a git dependency pinned to a
+specific commit of https://github.com/vinodkrishnan23/pov-builder-code —
+not a local relative path, so this repo is self-contained: a fresh
+`git clone` of just `pov-spec-agent` builds on its own, with no sibling
+checkout required) and adds only what's specific to running this slice
 standalone on Magenta:
 
 - `src/pov_spec_agent/graph.py` — `build_spec_graph(...)`, a truncated
@@ -42,6 +45,12 @@ standalone on Magenta:
   (this is a single graph, not `App.deep_agent()` subagent dispatch).
 
 `pov-builder` itself is never modified by this project.
+
+**Updating the pinned `pov-builder` commit** — bump the `rev` in
+`pyproject.toml`'s `[tool.uv.sources]` to the new commit sha, then
+`rm uv.lock && uv sync && uv run pytest`. Deliberately not left tracking
+`main` automatically — a silent upstream change shouldn't change what
+gets deployed here without a review step.
 
 ## Local development
 

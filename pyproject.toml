@@ -34,10 +34,13 @@ dev = [
 testpaths = ["tests"]
 
 [tool.uv.sources]
-# Local path dependency — reuses pov-builder's node/model/tooling code
-# as-is (never duplicated, never modified by this project). `editable`
-# means changes to ../pov-builder are picked up without reinstalling.
-pov-builder = { path = "../pov-builder", editable = true }
+# Git dependency (not a local path) — makes this project self-contained:
+# a fresh `git clone` of just pov-spec-agent builds on its own, without
+# needing pov-builder checked out as a sibling directory. Pinned to a
+# specific commit, same reasoning as magenta-sdklanggraph's pin below —
+# bump this deliberately (and re-run the test suite) when pov-builder's
+# own repo moves forward, rather than silently tracking its main branch.
+pov-builder = { git = "https://github.com/vinodkrishnan23/pov-builder-code", rev = "a72996b41ed151d12f72c532c93e10cd12653bb5" }
 # Same source + exact commit spec-architect/uv.lock (a real,
 # already-working Magenta agent in this workspace) actually resolved to —
 # trusted over the scaffold-magenta-multi-agent skill's generic template,

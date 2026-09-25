@@ -1,0 +1,21 @@
+name: poc-builder-frontend-agent
+entrypoint: main:app
+framework: langgraph
+features:
+    guardrails: false
+    memory: false
+version: 0.1.1
+required_secrets:
+    aer: &runtime_secrets
+        - OPENAI_API_KEY
+        - MONGODB_URI
+        - POC_METADATA_DATABASE
+        - POC_METADATA_COLLECTION
+        - GITHUB_TOKEN
+        - GITHUB_REPO_LINK
+    tools:
+        invoke_llm:
+            - OPENAI_API_KEY
+        invoke_frontend_agent: *runtime_secrets
+network:
+    egress_mode: allow_all

@@ -1,4 +1,6 @@
 .agentic/
+.agents/
+.claude/
 .env
 .env.*
 !.env.example

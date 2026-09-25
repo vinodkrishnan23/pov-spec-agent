@@ -3,11 +3,17 @@ name = "pov-spec-agent"
 version = "0.1.0"
 description = "Magenta deployment of pov-builder's spec-design slice (new.md Phases 1-3 + both human approval gates)"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.13"
 license = {text = "Apache-2.0"}
 dependencies = [
     "pov-builder",
     "magenta-sdklanggraph",
+    # Transitive deps of magenta-sdklanggraph, listed explicitly so their
+    # [tool.uv.sources] path override below actually takes effect — see
+    # that section's comment for why.
+    "magenta-sdk-core",
+    "agentic-platform-memory",
+    "runner-shared",
     "python-dotenv>=1.0.0",
     "langgraph>=0.2.0",
     "langchain-core>=0.3.0",
@@ -34,18 +40,28 @@ dev = [
 testpaths = ["tests"]
 
 [tool.uv.sources]
-# Git dependency (not a local path) — makes this project self-contained:
-# a fresh `git clone` of just pov-spec-agent builds on its own, without
-# needing pov-builder checked out as a sibling directory. Pinned to a
-# specific commit, same reasoning as magenta-sdklanggraph's pin below —
-# bump this deliberately (and re-run the test suite) when pov-builder's
-# own repo moves forward, rather than silently tracking its main branch.
-pov-builder = { git = "https://github.com/vinodkrishnan23/pov-builder-code", rev = "a72996b41ed151d12f72c532c93e10cd12653bb5" }
-# Same source + exact commit spec-architect/uv.lock (a real,
-# already-working Magenta agent in this workspace) actually resolved to —
-# trusted over the scaffold-magenta-multi-agent skill's generic template,
-# which names a different subdirectory. Pinned to this rev deliberately:
-# HEAD of this repo has since renamed the package to
-# `agent-engine-sdk-langgraph`, which breaks `pov_builder`'s (and every
-# sibling agent's) `from magenta_sdklanggraph import App` import.
-magenta-sdklanggraph = { git = "https://github.com/10gen/magenta-client-libraries", subdirectory = "packages/python/packages/agent-engine-sdk-langgraph", rev = "3e1ec58f5ea8579fedcfc47e5128dedf7ac07f1d" }
+# Vendored wheels, NOT git dependencies — `agentic build`'s remote sandbox
+# has no way to authenticate a `git clone` against a private repo (no TTY
+# for a credential prompt, and `.netrc`/SSH keys are always stripped from
+# the uploaded build archive — confirmed live: pov-builder-code AND
+# 10gen/magenta-client-libraries are both private, and a real build
+# failed with "could not read Username for 'https://github.com'").
+# `agent.yaml`'s `artifact_repositories` mechanism doesn't help either —
+# its `type` field is a strict pypi/npm enum (checked directly against the
+# platform's own agentconfig.ArtifactRepositoryConfig source); there is no
+# `git` type. Building each of these once, locally (where real git access
+# already exists) and vendoring the resulting pure-Python wheel here is
+# the platform's own documented escape hatch for exactly this case — see
+# README.md for the exact build commands to reproduce these.
+pov-builder = { path = "wheels/pov_builder-0.1.0-py3-none-any.whl" }
+magenta-sdklanggraph = { path = "wheels/magenta_sdklanggraph-0.1.0-py3-none-any.whl" }
+# Transitive dependencies of magenta-sdklanggraph — inside
+# magenta-client-libraries' own monorepo these resolve via
+# `{ workspace = true }` (sibling packages), which only works within that
+# workspace. Outside it (as installed here), uv previously fell back to
+# auto-cloning the WHOLE magenta-client-libraries repo and resolving these
+# as siblings within it — same private-repo auth problem, one level
+# removed. Overridden here the same way as the two direct dependencies.
+magenta-sdk-core = { path = "wheels/magenta_sdk_core-0.1.0-py3-none-any.whl" }
+agentic-platform-memory = { path = "wheels/agentic_platform_memory-0.10.0-py3-none-any.whl" }
+runner-shared = { path = "wheels/runner_shared-0.1.0-py3-none-any.whl" }

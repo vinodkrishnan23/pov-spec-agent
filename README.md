@@ -72,6 +72,47 @@ bigger change.
 `main` automatically — a silent upstream change shouldn't change what
 gets deployed here without a review step.
 
+## `wheels/` — why 5 packages are vendored instead of fetched via git
+
+`agentic build`'s remote sandbox has no way to authenticate a `git clone`
+against a private repo — confirmed live: both `vinodkrishnan23/pov-builder-code`
+and `10gen/magenta-client-libraries` are private, and a real build failed
+with `fatal: could not read Username for 'https://github.com': terminal
+prompts disabled`. There's no TTY for a credential prompt, and `.netrc`/
+SSH keys/`.git-credentials` are unconditionally stripped from the uploaded
+build archive. `agent.yaml`'s `artifact_repositories` mechanism doesn't
+help either — its `type` field is a strict `pypi`/`npm` enum (checked
+directly against the platform's own `agentconfig.ArtifactRepositoryConfig`
+Go source); there's no `git` type. Locally, `uv sync` still works fine
+because the local machine already has real git access — only the remote
+build sandbox is blocked.
+
+The platform's own documented fix for exactly this ("install private
+Python packages at build time without exposing package-index credentials")
+is vendoring pre-built wheels — `[tool.uv.sources]` now points
+`pov-builder`, `magenta-sdklanggraph`, and 3 of its own transitive
+dependencies (`magenta-sdk-core`, `agentic-platform-memory`,
+`runner-shared` — normally resolved via `{ workspace = true }` *inside*
+`magenta-client-libraries`' own monorepo, which doesn't apply once
+installed standalone) at local `.whl` files in `wheels/`, instead of git
+URLs. All 5 build with `hatchling` (pure Python, no compiled extensions),
+so a wheel built on any platform works identically on the deploy target
+(CPython 3.11 glibc Linux x86_64).
+
+To rebuild these (e.g. after bumping a pinned commit):
+```bash
+# pov-builder
+uv build --wheel --out-dir wheels /path/to/pov-builder-code/checkout
+
+# magenta-client-libraries subpackages (adjust the checkout path to
+# wherever `uv cache dir`/git-v0/checkouts/... has it, or a fresh clone)
+for d in agent-engine-sdk-langgraph agent-engine-sdk agent-engine-sdk-memory agent-engine-runner-shared; do
+  uv build --wheel --out-dir wheels /path/to/magenta-client-libraries/packages/python/packages/$d
+done
+```
+Then `rm uv.lock && uv sync && uv run pytest` to confirm, and delete the
+old `.whl` files these replace.
+
 ## Local development
 
 ```bash

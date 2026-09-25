@@ -1,0 +1,23 @@
+name: poc-builder-coding-orchestrator
+entrypoint: main:app
+framework: langgraph
+features:
+    guardrails: false
+    memory: false
+version: 0.1.3
+required_secrets:
+    aer: &runtime_secrets
+        - OPENAI_API_KEY
+        - MONGODB_URI
+        - GITHUB_TOKEN
+        - GITHUB_REPO_LINK
+        - POC_AGENT_AUTH_TOKEN
+    tools:
+        invoke_llm:
+            - OPENAI_API_KEY
+        invoke_coding_orchestrator: *runtime_secrets
+        start_code_run: *runtime_secrets
+        process_code_run: *runtime_secrets
+        repair_component: *runtime_secrets
+network:
+    egress_mode: allow_all

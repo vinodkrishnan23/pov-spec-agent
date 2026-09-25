@@ -8,21 +8,146 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "agentic-platform-memory"
-version = "0.10.0"
-source = { path = "wheels/agentic_platform_memory-0.10.0-py3-none-any.whl" }
+name = "agent-engine-runner-shared"
+version = "0.11.1"
+source = { path = "wheels/agent_engine_runner_shared-0.11.1-py3-none-any.whl" }
+dependencies = [
+    { name = "agent-engine-sdk" },
+    { name = "agent-engine-sdk-memory" },
+    { name = "fastapi" },
+    { name = "filelock" },
+    { name = "httpx" },
+    { name = "httpx-sse" },
+    { name = "jsonschema" },
+    { name = "mcp" },
+    { name = "msgpack" },
+    { name = "protobuf" },
+    { name = "pydantic" },
+    { name = "python-dotenv" },
+    { name = "pyyaml" },
+    { name = "regex" },
+    { name = "sentry-sdk" },
+    { name = "starlette" },
+    { name = "uvicorn" },
+]
+wheels = [
+    { filename = "agent_engine_runner_shared-0.11.1-py3-none-any.whl", hash = "sha256:f029a59873fe1856cb6c98c306d3c1b522d4885791a40049497778429e3edebb" },
+]
+
+[package.optional-dependencies]
+mongodb = [
+    { name = "motor" },
+    { name = "pymongo" },
+]
+tracing = [
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-exporter-otlp-proto-http" },
+    { name = "opentelemetry-instrumentation-httpx" },
+    { name = "opentelemetry-sdk" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "agent-engine-sdk", specifier = "==0.11.1" },
+    { name = "agent-engine-sdk-memory", specifier = "==0.11.1" },
+    { name = "fastapi", specifier = ">=0.141.1" },
+    { name = "filelock", specifier = ">=3.0.0" },
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "httpx-sse", specifier = ">=0.4.0" },
+    { name = "jsonschema", specifier = ">=4.26.0" },
+    { name = "mcp", specifier = "==1.27.0" },
+    { name = "mongomock", marker = "extra == 'dev'", specifier = ">=4.1.0" },
+    { name = "motor", marker = "extra == 'mongodb'", specifier = ">=3.0.0" },
+    { name = "msgpack", specifier = ">=1.0.0" },
+    { name = "msgpack", marker = "extra == 'dev'", specifier = ">=1.0.0" },
+    { name = "opentelemetry-api", marker = "extra == 'tracing'", specifier = ">=1.20.0" },
+    { name = "opentelemetry-exporter-otlp-proto-http", marker = "extra == 'tracing'", specifier = ">=1.20.0" },
+    { name = "opentelemetry-instrumentation-httpx", marker = "extra == 'tracing'", specifier = ">=0.47b0" },
+    { name = "opentelemetry-sdk", marker = "extra == 'tracing'", specifier = ">=1.20.0" },
+    { name = "protobuf", specifier = ">=6.33.6,<7" },
+    { name = "pydantic", specifier = ">=2.0.0" },
+    { name = "pymongo", marker = "extra == 'dev'", specifier = ">=4.0.0" },
+    { name = "pymongo", marker = "extra == 'mongodb'", specifier = ">=4.0.0" },
+    { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.390" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24.0" },
+    { name = "python-dotenv", specifier = ">=1.0.0" },
+    { name = "pyyaml", specifier = ">=6.0" },
+    { name = "regex", specifier = ">=2026.4.4" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6.0" },
+    { name = "sentry-sdk", specifier = ">=2.27.0" },
+    { name = "starlette", specifier = ">=1.4.1" },
+    { name = "uvicorn", specifier = ">=0.32.0" },
+]
+provides-extras = ["dev", "mongodb", "tracing"]
+
+[[package]]
+name = "agent-engine-sdk"
+version = "0.11.1"
+source = { path = "wheels/agent_engine_sdk-0.11.1-py3-none-any.whl" }
+dependencies = [
+    { name = "pydantic" },
+]
+wheels = [
+    { filename = "agent_engine_sdk-0.11.1-py3-none-any.whl", hash = "sha256:935956ceac4ba1dcb7afbe48328710f50608fcd446e6c3e462d9bf6b928669d8" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2.13.5" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24.0" },
+]
+provides-extras = ["dev"]
+
+[[package]]
+name = "agent-engine-sdk-langgraph"
+version = "0.11.1"
+source = { path = "wheels/agent_engine_sdk_langgraph-0.11.1-py3-none-any.whl" }
+dependencies = [
+    { name = "agent-engine-runner-shared", extra = ["mongodb", "tracing"] },
+    { name = "agent-engine-sdk" },
+    { name = "agent-engine-sdk-memory" },
+    { name = "langgraph" },
+    { name = "langgraph-checkpoint-mongodb" },
+    { name = "openinference-instrumentation-langchain" },
+]
+wheels = [
+    { filename = "agent_engine_sdk_langgraph-0.11.1-py3-none-any.whl", hash = "sha256:4088024933083c2a32d07f03ed1db2db1d7a531a4c8b761a763229816e2ca2ea" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "agent-engine-runner-shared", extras = ["mongodb", "tracing"], specifier = "==0.11.1" },
+    { name = "agent-engine-sdk", specifier = "==0.11.1" },
+    { name = "agent-engine-sdk-memory", specifier = "==0.11.1" },
+    { name = "anyio", marker = "extra == 'dev'", specifier = ">=4.0" },
+    { name = "deepagents", marker = "extra == 'dev'", specifier = "==0.5.3" },
+    { name = "langgraph", specifier = ">=1.2.11,<2" },
+    { name = "langgraph-checkpoint-mongodb", specifier = ">=0.3.1" },
+    { name = "openinference-instrumentation-langchain", specifier = ">=0.1.4" },
+    { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.414" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.9" },
+]
+provides-extras = ["dev"]
+
+[[package]]
+name = "agent-engine-sdk-memory"
+version = "0.11.1"
+source = { path = "wheels/agent_engine_sdk_memory-0.11.1-py3-none-any.whl" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },
 ]
 wheels = [
-    { filename = "agentic_platform_memory-0.10.0-py3-none-any.whl", hash = "sha256:9c881b5995504aa56ce16fd58a880127a9f9d902027cc55d4c012b375353e796" },
+    { filename = "agent_engine_sdk_memory-0.11.1-py3-none-any.whl", hash = "sha256:e3d7ddb25f69c7075fd02378784a5cc91e7ca7d68ea7870815325e77140c0985" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.25.0" },
-    { name = "pydantic", specifier = ">=2.0" },
+    { name = "pydantic", specifier = ">=2.13.5" },
     { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24.0" },
@@ -753,57 +878,6 @@ wheels = [
 ]
 
 [[package]]
-name = "magenta-sdk-core"
-version = "0.1.0"
-source = { path = "wheels/magenta_sdk_core-0.1.0-py3-none-any.whl" }
-dependencies = [
-    { name = "pydantic" },
-]
-wheels = [
-    { filename = "magenta_sdk_core-0.1.0-py3-none-any.whl", hash = "sha256:060599ee003a2b84773a87a9294e8fe2a7cb2ccf996ba13778ac7cbaec1a78af" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pydantic", specifier = ">=2.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
-    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24.0" },
-]
-provides-extras = ["dev"]
-
-[[package]]
-name = "magenta-sdklanggraph"
-version = "0.1.0"
-source = { path = "wheels/magenta_sdklanggraph-0.1.0-py3-none-any.whl" }
-dependencies = [
-    { name = "agentic-platform-memory" },
-    { name = "langgraph" },
-    { name = "langgraph-checkpoint-mongodb" },
-    { name = "magenta-sdk-core" },
-    { name = "openinference-instrumentation-langchain" },
-    { name = "runner-shared", extra = ["mongodb", "tracing"] },
-]
-wheels = [
-    { filename = "magenta_sdklanggraph-0.1.0-py3-none-any.whl", hash = "sha256:dd65a7e3a78a76e4197246db16c1620c4092da05b58fb6352c9ffa2233bf4ea0" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "agentic-platform-memory", specifier = ">=0.9,<1.0" },
-    { name = "anyio", marker = "extra == 'dev'", specifier = ">=4.0" },
-    { name = "deepagents", marker = "extra == 'dev'", specifier = "==0.5.3" },
-    { name = "langgraph", specifier = ">=1.0.0" },
-    { name = "langgraph-checkpoint-mongodb", specifier = ">=0.3.1" },
-    { name = "magenta-sdk-core" },
-    { name = "openinference-instrumentation-langchain", specifier = ">=0.1.4" },
-    { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.9" },
-    { name = "runner-shared", extras = ["mongodb", "tracing"], specifier = ">=0.1.0,<1.0" },
-]
-provides-extras = ["dev"]
-
-[[package]]
 name = "mcp"
 version = "1.27.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1276,15 +1350,15 @@ name = "pov-spec-agent"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "agentic-platform-memory" },
+    { name = "agent-engine-runner-shared" },
+    { name = "agent-engine-sdk" },
+    { name = "agent-engine-sdk-langgraph" },
+    { name = "agent-engine-sdk-memory" },
     { name = "langchain-core" },
     { name = "langchain-openai" },
     { name = "langgraph" },
-    { name = "magenta-sdk-core" },
-    { name = "magenta-sdklanggraph" },
     { name = "pov-builder" },
     { name = "python-dotenv" },
-    { name = "runner-shared" },
 ]
 
 [package.dev-dependencies]
@@ -1295,15 +1369,15 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "agentic-platform-memory", path = "wheels/agentic_platform_memory-0.10.0-py3-none-any.whl" },
+    { name = "agent-engine-runner-shared", path = "wheels/agent_engine_runner_shared-0.11.1-py3-none-any.whl" },
+    { name = "agent-engine-sdk", path = "wheels/agent_engine_sdk-0.11.1-py3-none-any.whl" },
+    { name = "agent-engine-sdk-langgraph", path = "wheels/agent_engine_sdk_langgraph-0.11.1-py3-none-any.whl" },
+    { name = "agent-engine-sdk-memory", path = "wheels/agent_engine_sdk_memory-0.11.1-py3-none-any.whl" },
     { name = "langchain-core", specifier = ">=0.3.0" },
     { name = "langchain-openai", specifier = ">=0.3.0" },
     { name = "langgraph", specifier = ">=0.2.0" },
-    { name = "magenta-sdk-core", path = "wheels/magenta_sdk_core-0.1.0-py3-none-any.whl" },
-    { name = "magenta-sdklanggraph", path = "wheels/magenta_sdklanggraph-0.1.0-py3-none-any.whl" },
     { name = "pov-builder", path = "wheels/pov_builder-0.1.0-py3-none-any.whl" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
-    { name = "runner-shared", path = "wheels/runner_shared-0.1.0-py3-none-any.whl" },
 ]
 
 [package.metadata.requires-dev]
@@ -1770,80 +1844,6 @@ wheels = [
 ]
 
 [[package]]
-name = "runner-shared"
-version = "0.1.0"
-source = { path = "wheels/runner_shared-0.1.0-py3-none-any.whl" }
-dependencies = [
-    { name = "agentic-platform-memory" },
-    { name = "fastapi" },
-    { name = "filelock" },
-    { name = "httpx" },
-    { name = "httpx-sse" },
-    { name = "jsonschema" },
-    { name = "magenta-sdk-core" },
-    { name = "mcp" },
-    { name = "msgpack" },
-    { name = "protobuf" },
-    { name = "pydantic" },
-    { name = "python-dotenv" },
-    { name = "pyyaml" },
-    { name = "regex" },
-    { name = "sentry-sdk" },
-    { name = "starlette" },
-    { name = "uvicorn" },
-]
-wheels = [
-    { filename = "runner_shared-0.1.0-py3-none-any.whl", hash = "sha256:0a59040c70bd47b7797c491d834b69561fa56d899c7564a532e572b5dd4f331d" },
-]
-
-[package.optional-dependencies]
-mongodb = [
-    { name = "motor" },
-    { name = "pymongo" },
-]
-tracing = [
-    { name = "opentelemetry-api" },
-    { name = "opentelemetry-exporter-otlp-proto-http" },
-    { name = "opentelemetry-instrumentation-httpx" },
-    { name = "opentelemetry-sdk" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "agentic-platform-memory", specifier = ">=0.9,<1.0" },
-    { name = "fastapi", specifier = ">=0.115.0" },
-    { name = "filelock", specifier = ">=3.0.0" },
-    { name = "httpx", specifier = ">=0.27.0" },
-    { name = "httpx-sse", specifier = ">=0.4.0" },
-    { name = "jsonschema", specifier = ">=4.26.0" },
-    { name = "magenta-sdk-core", specifier = ">=0.1.0" },
-    { name = "mcp", specifier = "==1.27.0" },
-    { name = "mongomock", marker = "extra == 'dev'", specifier = ">=4.1.0" },
-    { name = "motor", marker = "extra == 'mongodb'", specifier = ">=3.0.0" },
-    { name = "msgpack", specifier = ">=1.0.0" },
-    { name = "msgpack", marker = "extra == 'dev'", specifier = ">=1.0.0" },
-    { name = "opentelemetry-api", marker = "extra == 'tracing'", specifier = ">=1.20.0" },
-    { name = "opentelemetry-exporter-otlp-proto-http", marker = "extra == 'tracing'", specifier = ">=1.20.0" },
-    { name = "opentelemetry-instrumentation-httpx", marker = "extra == 'tracing'", specifier = ">=0.47b0" },
-    { name = "opentelemetry-sdk", marker = "extra == 'tracing'", specifier = ">=1.20.0" },
-    { name = "protobuf", specifier = ">=6.33.6,<7" },
-    { name = "pydantic", specifier = ">=2.0.0" },
-    { name = "pymongo", marker = "extra == 'dev'", specifier = ">=4.0.0" },
-    { name = "pymongo", marker = "extra == 'mongodb'", specifier = ">=4.0.0" },
-    { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.390" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
-    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24.0" },
-    { name = "python-dotenv", specifier = ">=1.0.0" },
-    { name = "pyyaml", specifier = ">=6.0" },
-    { name = "regex", specifier = ">=2026.4.4" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6.0" },
-    { name = "sentry-sdk", specifier = ">=2.27.0" },
-    { name = "starlette", specifier = ">=1.4.1" },
-    { name = "uvicorn", specifier = ">=0.32.0" },
-]
-provides-extras = ["dev", "mongodb", "tracing"]
-
-[[package]]
 name = "sentry-sdk"
 version = "2.70.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1867,34 +1867,17 @@ wheels = [
 
 [[package]]
 name = "sqlalchemy"
-version = "2.1.0"
+version = "2.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ba/29/8de56a7f78fb0d71fe4f91ee43401a24ba8777e6d4f72683f268c9e0c72e/sqlalchemy-2.1.0.tar.gz", hash = "sha256:37600e4641c435a7e4549f4e6df79d9dfc096bb9712a10dba8925921bc87bc3c", size = 10502427, upload-time = "2026-09-24T20:12:49.737Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a8/cb/7c68da82239ffae9378eca076afe14c310e17a4f01e3d315112f266e26c7/sqlalchemy-2.1.1.tar.gz", hash = "sha256:fcf3cbb33bb23bad75d2150157c21804618745731e9931ab27e61879a9f6123b", size = 10503203, upload-time = "2026-09-25T14:59:00.117Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2c/c3/6a6a1381f1c63dfbaa7999f6fbc32a071420c5837fe2780dc457fc1d21c4/sqlalchemy-2.1.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:543d446ec356b5d6987fc61cb8835c7095f992234a4929dd10b573031e7133cd", size = 2455267, upload-time = "2026-09-24T20:36:01.28Z" },
-    { url = "https://files.pythonhosted.org/packages/9d/8e/0ed2428b893d9aff70a5deb8b012230a325502509c2b677f33b9e6e00837/sqlalchemy-2.1.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:29029fc5b7f85f65903240e3bc799116cc9d876dcdce4b71b61cd81d17b5e53e", size = 4612539, upload-time = "2026-09-24T20:45:02.882Z" },
-    { url = "https://files.pythonhosted.org/packages/f9/ce/bdf8833b390740c14ef1b32e2461dc89d2038c7afd1850a5fd3314235c51/sqlalchemy-2.1.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:cacbda211aa49d685af10bb286bc3ce0aef07705bb039d71d17c4316f635681e", size = 4633400, upload-time = "2026-09-24T20:48:12.458Z" },
-    { url = "https://files.pythonhosted.org/packages/66/a8/64b42a667b5ad1d2080f4e635a2abded379f2d9f931accf9d279ad15be6d/sqlalchemy-2.1.0-cp311-cp311-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:27b86130ca7a780132e591ca7d3e784d12d5097ed7a386481c6e664fb4923d51", size = 4364005, upload-time = "2026-09-24T21:07:53.304Z" },
-    { url = "https://files.pythonhosted.org/packages/20/99/a32424845487b2150a091a6c045f7510b239211f86554a7ca2e0996520ac/sqlalchemy-2.1.0-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:973726976edff5d19ef981143f1cb39cf030b2e8c215eac0878ce2c85f4d74d0", size = 4551194, upload-time = "2026-09-24T20:45:04.904Z" },
-    { url = "https://files.pythonhosted.org/packages/a7/25/23a07c9d3e6a5446422cf0fc22127ede914c3495467b7dae17caf019c7b5/sqlalchemy-2.1.0-cp311-cp311-musllinux_1_2_riscv64.whl", hash = "sha256:9f0da1bd9a1aac4d67f0e7961f669166287e43348c20e766a48debca20c76d9e", size = 4361361, upload-time = "2026-09-24T21:07:55.594Z" },
-    { url = "https://files.pythonhosted.org/packages/10/5c/aac3073d9d12a38ba40c81613595507842f804152c70305184972a149392/sqlalchemy-2.1.0-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:4f067b16473bb6c9c76a82f8b2a0c9346c6c831cf66b1b884f1b6175d17f4aa0", size = 4603426, upload-time = "2026-09-24T20:48:14.785Z" },
-    { url = "https://files.pythonhosted.org/packages/b0/87/d5e77bc104c17adc5af17e9b46954db200030090244cd8e3cb68a6b531c9/sqlalchemy-2.1.0-cp311-cp311-win32.whl", hash = "sha256:220878ad3734a4b90fc5a6f68643cbf3b9be5041d2d2cf7f455cbbe90ad11cac", size = 2372208, upload-time = "2026-09-24T20:36:40.107Z" },
-    { url = "https://files.pythonhosted.org/packages/9b/c8/4fcdb768e12fe9d08605a01354143cce77a54565d5397d385a4f98402efd/sqlalchemy-2.1.0-cp311-cp311-win_amd64.whl", hash = "sha256:9d87d68421f49c263796b5f9939cae9f26cb4bde214757bb57f6a7acec2d550b", size = 2422194, upload-time = "2026-09-24T20:36:41.744Z" },
-    { url = "https://files.pythonhosted.org/packages/f2/78/961df076e04e370f7c4d395dfc5e0ea82a9385953791fff3451be8bc3699/sqlalchemy-2.1.0-cp311-cp311-win_arm64.whl", hash = "sha256:8c1f645015a27eac55382978fa09c423a40712d72f38136c37aaaa3afc806d97", size = 2387225, upload-time = "2026-09-24T20:27:14.14Z" },
-    { url = "https://files.pythonhosted.org/packages/db/f4/2fc46a1739a0ea1f653e1c1cb0e0a37e43cb9a5d27d609e72105a31b64e9/sqlalchemy-2.1.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:713dba4aae624bf7a903e35ee653af713629098ff05c99dd41668d72b2e5abda", size = 2458587, upload-time = "2026-09-24T20:36:03.089Z" },
-    { url = "https://files.pythonhosted.org/packages/06/76/e25ff72ea35d99c0d357877cb368f7a7c12313e5b4cf49c3f67cc0581569/sqlalchemy-2.1.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:a394b67ae3723cc97cf83d1e72770f11584fe4b55b108a29211bfb873d5eab6d", size = 4653124, upload-time = "2026-09-24T20:45:07.024Z" },
-    { url = "https://files.pythonhosted.org/packages/e0/d8/e9562c41c0efc9a8b9d0e44f97b08d8d88d1716891453b4d5c83ef1239b6/sqlalchemy-2.1.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:83f680cd3e4f54215c1a46271530f7869ae878763b61096c497bf82964abd17b", size = 4701916, upload-time = "2026-09-24T20:48:16.875Z" },
-    { url = "https://files.pythonhosted.org/packages/ad/2b/b148492f670cb343a0c165335c04333de4aa3dd00f43eba9d80aea883590/sqlalchemy-2.1.0-cp312-cp312-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl", hash = "sha256:73e513e8e878e9f20b8707b84f6dff6646d8eed62a7783f9df968e1b373d244f", size = 4351858, upload-time = "2026-09-24T21:07:57.657Z" },
-    { url = "https://files.pythonhosted.org/packages/fc/db/fe5f85872967ec8b234fac64c62cd3affa662081f60b609672dac849198e/sqlalchemy-2.1.0-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:e1726e9da236fcf838cb8dbfb4e72d17a1ed93956b211c52e40c33f18852f663", size = 4577009, upload-time = "2026-09-24T20:45:09.469Z" },
-    { url = "https://files.pythonhosted.org/packages/e1/01/774d813bb5682dfc5e5403739ae3ab86e55cfaf328e93b5154f95202f278/sqlalchemy-2.1.0-cp312-cp312-musllinux_1_2_riscv64.whl", hash = "sha256:ba44748f6f22acfee9a7e4444d5fb2901e3b914ad23d6f9ca1104349e926ea92", size = 4346268, upload-time = "2026-09-24T21:07:59.812Z" },
-    { url = "https://files.pythonhosted.org/packages/1a/4d/b7ebe30507ca5e0b0f561c36b111ce30f211f036667d8de4c5a252d97127/sqlalchemy-2.1.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:9c7fcb399c088a082b5d9187db1468bb71514ba5389809a57da7229d51613b6f", size = 4650657, upload-time = "2026-09-24T20:48:18.927Z" },
-    { url = "https://files.pythonhosted.org/packages/99/39/232e7853085158edcceda128e05c0e3a7570be606f4bde270247281c945f/sqlalchemy-2.1.0-cp312-cp312-win32.whl", hash = "sha256:ba8462d6e178af73a24c5eaea20fa325ac24c2941c6367ef59d5ccb20d6b9169", size = 2369272, upload-time = "2026-09-24T20:36:43.329Z" },
-    { url = "https://files.pythonhosted.org/packages/d4/48/512fdd8a9c2078abc8378195051d7a1d7c2f15545c453138052030b80534/sqlalchemy-2.1.0-cp312-cp312-win_amd64.whl", hash = "sha256:46c7fcf4b3aac35947572c9598a35e101c2c8e01999ada5c7097a7666dd0ccf2", size = 2421594, upload-time = "2026-09-24T20:36:44.815Z" },
-    { url = "https://files.pythonhosted.org/packages/0f/06/e274c2fa3d64e61bd55ab5de254ad31b07b9bfe108f33c24ff9de2465df1/sqlalchemy-2.1.0-cp312-cp312-win_arm64.whl", hash = "sha256:b87ed75fd74f49da2d637348ff2ef4453e15a8b3e798b06f52c5e57357fa49da", size = 2381171, upload-time = "2026-09-24T20:27:15.52Z" },
-    { url = "https://files.pythonhosted.org/packages/25/8a/9178cd9411c57f16a1e73b0a75bca9270cd471aafdccae2dd8b0b491c9bd/sqlalchemy-2.1.0-py3-none-any.whl", hash = "sha256:8728cbc7544d05c5cab9bf50749636f128e4db4828a20ce5952355c4f33d6e2e", size = 2047583, upload-time = "2026-09-24T20:36:44.055Z" },
+    { url = "https://files.pythonhosted.org/packages/b6/49/5046a3fc309a3c1953bb163d37d417914ce17e4768f64e76376a4ccdc908/sqlalchemy-2.1.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:5516bdaacf5521b7de69a5c76961fde2cdc4edcb39730eccff16246a44cb8715", size = 2455148, upload-time = "2026-09-25T15:17:03.244Z" },
+    { url = "https://files.pythonhosted.org/packages/42/18/1240d7c33784b6737bb47bfec63da246b174db4878c1cf2bc3b7897e945a/sqlalchemy-2.1.1-cp311-cp311-win_arm64.whl", hash = "sha256:e08c92feb447b60e352c3581cc8a03119e36917b79362af62fd1a289c4d8e27b", size = 2387119, upload-time = "2026-09-25T15:11:43.595Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/44/950ac8e093784fdd5fd4fc385d110e0cf1d1d2bae781dc7be659bf3e7af3/sqlalchemy-2.1.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:1abf1acecd4d0fc34d4ab7e9cda9e849ce95b647e1a5f76db7d2a5a0bea4e1e5", size = 2458475, upload-time = "2026-09-25T15:17:05.018Z" },
+    { url = "https://files.pythonhosted.org/packages/e3/65/fc72cd55397792553b72a8c43e14531baa436d08f832486d2cff9e806f36/sqlalchemy-2.1.1-cp312-cp312-win_arm64.whl", hash = "sha256:af189bd861bd31a84f0ba244d6db0c8aeae9e56448c9001bf02ee6a93758b39e", size = 2381060, upload-time = "2026-09-25T15:11:45.018Z" },
 ]
 
 [[package]]

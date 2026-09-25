@@ -90,9 +90,9 @@ build sandbox is blocked.
 The platform's own documented fix for exactly this ("install private
 Python packages at build time without exposing package-index credentials")
 is vendoring pre-built wheels — `[tool.uv.sources]` now points
-`pov-builder`, `magenta-sdklanggraph`, and 3 of its own transitive
-dependencies (`magenta-sdk-core`, `agentic-platform-memory`,
-`runner-shared` — normally resolved via `{ workspace = true }` *inside*
+`pov-builder`, `agent-engine-sdk-langgraph`, and 3 of its own transitive
+dependencies (`agent-engine-sdk`, `agent-engine-sdk-memory`,
+`agent-engine-runner-shared` — normally resolved via `{ workspace = true }` *inside*
 `magenta-client-libraries`' own monorepo, which doesn't apply once
 installed standalone) at local `.whl` files in `wheels/`, instead of git
 URLs. All 5 build with `hatchling` (pure Python, no compiled extensions),

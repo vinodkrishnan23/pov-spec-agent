@@ -7,13 +7,13 @@ requires-python = ">=3.11,<3.13"
 license = {text = "Apache-2.0"}
 dependencies = [
     "pov-builder",
-    "magenta-sdklanggraph",
-    # Transitive deps of magenta-sdklanggraph, listed explicitly so their
+    "agent-engine-sdk-langgraph",
+    # Transitive deps of agent-engine-sdk-langgraph, listed explicitly so their
     # [tool.uv.sources] path override below actually takes effect — see
     # that section's comment for why.
-    "magenta-sdk-core",
-    "agentic-platform-memory",
-    "runner-shared",
+    "agent-engine-sdk",
+    "agent-engine-sdk-memory",
+    "agent-engine-runner-shared",
     "python-dotenv>=1.0.0",
     "langgraph>=0.2.0",
     "langchain-core>=0.3.0",
@@ -40,7 +40,7 @@ dev = [
 testpaths = ["tests"]
 
 [tool.uv.sources]
-# Vendored wheels, NOT git dependencies — `agentic build`'s remote sandbox
+# Vendored wheels, NOT git dependencies — `agentengine build`'s remote sandbox
 # has no way to authenticate a `git clone` against a private repo (no TTY
 # for a credential prompt, and `.netrc`/SSH keys are always stripped from
 # the uploaded build archive — confirmed live: pov-builder-code AND
@@ -54,14 +54,26 @@ testpaths = ["tests"]
 # the platform's own documented escape hatch for exactly this case — see
 # README.md for the exact build commands to reproduce these.
 pov-builder = { path = "wheels/pov_builder-0.1.0-py3-none-any.whl" }
-magenta-sdklanggraph = { path = "wheels/magenta_sdklanggraph-0.1.0-py3-none-any.whl" }
-# Transitive dependencies of magenta-sdklanggraph — inside
+agent-engine-sdk-langgraph = { path = "wheels/agent_engine_sdk_langgraph-0.11.1-py3-none-any.whl" }
+# Transitive dependencies of agent-engine-sdk-langgraph — inside
 # magenta-client-libraries' own monorepo these resolve via
 # `{ workspace = true }` (sibling packages), which only works within that
 # workspace. Outside it (as installed here), uv previously fell back to
 # auto-cloning the WHOLE magenta-client-libraries repo and resolving these
 # as siblings within it — same private-repo auth problem, one level
 # removed. Overridden here the same way as the two direct dependencies.
-magenta-sdk-core = { path = "wheels/magenta_sdk_core-0.1.0-py3-none-any.whl" }
-agentic-platform-memory = { path = "wheels/agentic_platform_memory-0.10.0-py3-none-any.whl" }
-runner-shared = { path = "wheels/runner_shared-0.1.0-py3-none-any.whl" }
+#
+# All 4 rebuilt from commit fb0351080e1fc4e7bdafd4a5d116cec6a1b22acf
+# (current main as of the agentic->agentengine / Atlas Agent Engine SDK
+# rename cutover) — the earlier pin (3e1ec58f..., pre-rename legacy
+# names) caused a real runtime crash: "Couldn't build proto file into
+# descriptor pool: duplicate file name workflow/v1/state.proto". The
+# upgraded runtime image (runner-base 0.1.111, orchestrator 0.11.1)
+# already ships its own copy of the now-canonical agent-engine-runner-shared
+# package; our old vendored wheel (pre-rename package name) registered the
+# SAME underlying .proto file under that legacy name, colliding with it.
+# Vendoring the new canonical names/versions instead avoids the collision
+# entirely — same generated proto, same package, one copy.
+agent-engine-sdk = { path = "wheels/agent_engine_sdk-0.11.1-py3-none-any.whl" }
+agent-engine-sdk-memory = { path = "wheels/agent_engine_sdk_memory-0.11.1-py3-none-any.whl" }
+agent-engine-runner-shared = { path = "wheels/agent_engine_runner_shared-0.11.1-py3-none-any.whl" }

@@ -20,7 +20,7 @@ import logging
 import sys
 
 from dotenv import load_dotenv
-from magenta_sdklanggraph import App
+from agent_engine_sdk_langgraph import App
 from pov_builder.llm import build_llm
 from pov_builder.tools.git_repo import GitHubRepoStore
 from pov_builder.tools.mongo_store import MongoPovRunStore
